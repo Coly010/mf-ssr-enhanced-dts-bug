@@ -1,0 +1,27 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "ssrremote1/Module": [
+        "module-federation-ssr/ssrremote1/src/remote-entry.ts"
+      ],
+      "ssrremote2/Module": [
+        "module-federation-ssr/ssrremote2/src/remote-entry.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

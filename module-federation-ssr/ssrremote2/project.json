@@ -1,0 +1,155 @@
+{
+  "name": "ssrremote2",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "module-federation-ssr/ssrremote2/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/module-federation-ssr/ssrremote2/browser",
+        "index": "module-federation-ssr/ssrremote2/src/index.html",
+        "baseHref": "/",
+        "main": "module-federation-ssr/ssrremote2/src/main.ts",
+        "tsConfig": "module-federation-ssr/ssrremote2/tsconfig.app.json",
+        "assets": [
+          "module-federation-ssr/ssrremote2/src/favicon.ico",
+          "module-federation-ssr/ssrremote2/src/assets"
+        ],
+        "styles": ["module-federation-ssr/ssrremote2/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "module-federation-ssr/ssrremote2/webpack.config.ts"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "module-federation-ssr/ssrremote2/src/environments/environment.ts",
+              "with": "module-federation-ssr/ssrremote2/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "module-federation-ssr/ssrremote2/webpack.config.prod.ts"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/webpack:ssr-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "browserTarget": "ssrremote2:build:development",
+        "serverTarget": "ssrremote2:serve-server:development",
+        "port": 4202,
+        "browserTargetOptions": {
+          "watch": true
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "browserTarget": "ssrremote2:build:production",
+          "serverTarget": "ssrremote2:serve-server:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "module-federation-ssr/ssrremote2/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "dependsOn": ["build", "server"],
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
+      "options": {
+        "command": "PORT=4202 node dist/module-federation-ssr/ssrremote2/server/server.js"
+      }
+    },
+    "server": {
+      "dependsOn": ["build"],
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "main": "module-federation-ssr/ssrremote2/server.ts",
+        "outputPath": "dist/module-federation-ssr/ssrremote2/server",
+        "outputFileName": "server.js",
+        "tsConfig": "module-federation-ssr/ssrremote2/tsconfig.server.json",
+        "compiler": "babel",
+        "externalDependencies": "all",
+        "outputHashing": "none",
+        "webpackConfig": "module-federation-ssr/ssrremote2/webpack.server.config.ts"
+      },
+      "configurations": {
+        "development": {
+          "optimization": false,
+          "sourceMap": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "module-federation-ssr/ssrremote2/src/environments/environment.ts",
+              "with": "module-federation-ssr/ssrremote2/src/environments/environment.prod.ts"
+            }
+          ],
+          "sourceMap": false
+        }
+      }
+    },
+    "serve-browser": {
+      "executor": "@nx/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "ssrremote2:build",
+        "hmr": true,
+        "port": 4202
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "ssrremote2:build:development"
+        },
+        "production": {
+          "buildTarget": "ssrremote2:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "serve-server": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "ssrremote2:server:development",
+        "buildTargetOptions": {
+          "watch": true
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "buildTarget": "ssrremote2:server:production"
+        }
+      }
+    }
+  }
+}
